@@ -1,21 +1,6 @@
 <?php
     session_start();
     include_once("lib.php");
-    /*
-    //prueba de conexion
-    $conexion = establecerConexion();
-
-    $stmt = $conexion->prepare("SELECT * FROM usuarios");
-
-    $stmt-> setFetchMode(PDO::FETCH_ASSOC);
-
-    $stmt->execute();
-
-    while($row = $stmt->fetch()) {
-        echo "Nombre: ". $row["nombre"] . "<br>";
-        echo "Email: ". $row["email"] . "<br>";
-    }
-    */
 
     /**
      * PETICIONES POR GET
@@ -26,6 +11,17 @@
 
         //comprobar si el error es no login
         if(strcmp($_GET["error"],"noLogin") === 0) {
+
+            //redirigimos a singin.php
+            header("Location: singin.php");
+            die();
+        }
+    }
+
+    //comprobar si llega una accion
+    if(isset($_GET["accion"])) {
+        if(strcmp($_GET["accion"],"logout") === 0) {
+            session_destroy();
 
             //redirigimos a singin.php
             header("Location: singin.php");
