@@ -27,6 +27,18 @@
             header("Location: singin.php");
             die();
         }
+
+        if(strcmp($_GET["accion"],"borrarPrestamo") === 0) {
+            //comprobar que se ha pasado una id
+            if(isset($_GET["id"])) {
+                //borrar de la base de datos el prestamo por esa id
+                borrarPrestamo($_GET["id"]);
+            }
+
+            //redirigimos a index.php
+            header("Location: index.php");
+            die();
+        }
     }
 
 

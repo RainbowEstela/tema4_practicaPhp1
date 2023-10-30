@@ -83,4 +83,49 @@
         //devolver todos los prestamos
         return $prestamos;
     }
+
+    /**
+     * borra el prestamo de la id pasada
+     */
+    function borrarPrestamo($id) {
+        //establecer conexion
+        $con = establecerConexion();
+
+        $consulta = $con->prepare("DELETE FROM prestamos where id=?;");
+        $consulta->bindValue(1,$id);
+
+        $consulta->execute();
+
+        //cerramos conexion
+        $con= null;
+    }
+
+    /**
+     * busca un prestamo pasandole una id
+     */
+    function buscarPrestamo($id) {
+        //establecer conexion
+        $con = establecerConexion();
+
+        //crear la consulta
+        $consulta = $con->prepare("SELECT prestamos.id, libros.isbn, usuarios.dni, prestamos.fechaInicio, prestamos.fechaFin, prestamos.estado
+        FROM biblioteca.prestamos
+        inner join usuarios
+        on usuarios.id = prestamos.usuarioID
+        inner join libros
+        on libros.id = prestamos.libroId
+        WHERE prestamos.id = ?; ");
+
+        $consulta->bindParam(1,$id);
+
+        $consulta -> setFetchMode(PDO::FETCH_ASSOC);
+        $consulta ->execute();
+
+        $prestamo = $consulta->fetch();
+
+        $con = null;
+
+        return $prestamo;
+
+    }
 ?>
