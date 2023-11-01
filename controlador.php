@@ -63,4 +63,52 @@
         die();
     }
 
+    //formulario de modificacion
+    if(isset($_POST["modificarPrestamo"])) {
+        //tratamos la informacion
+        $id = $_POST["id"];
+        $isbn = $_POST["isbn"];
+        $dni = $_POST["dni"];
+        $fechaIni = $_POST["fechaInicio"];
+        $fechaFin = $_POST["fechaFin"];
+        $estado = $_POST["estado"];
+
+        $libro = buscarLibro($isbn);
+        $usuario = buscarUsuario($dni);
+        $prestamo = buscarPrestamo($id);
+
+        //comprobar que el usuario y libro no existen en la base datos
+        if( $libro == false || $usuario == false ) {
+            //redirigimos a modificar.php
+            header("Location: modificar.php?error=datosErroneos&id=".$id);
+            die();
+        }
+
+        //comprobar el estado
+                    //nuevo estado                            //estado antiguo
+        if(strcmp($estado,"devuelto") === 0 && strcmp($prestamo["estado"],"devuelto") !== 0) {//cambiado de algo a devuelto sumo 1
+           
+            //sumamos un libro a la biblioteca
+            $nuevaCantidad = $libro["numeroEjemplares"] +1;
+
+                    //nuevo estado                            //estado antiguo
+        } else if (strcmp($estado,"devuelto") !== 0 && strcmp($prestamo["estado"],"devuelto") === 0) { //cambiado de devuelto a otra cosa resto 1
+            //comprobar que el stock no es 0
+            if($libro["numeroEjemplares"] > 0) {//se puede sacar un libro
+                
+                //restamos un libro a la biblioteca
+                $nuevaCantidad = $libro["numeroEjemplares"] -1;
+
+            } else {                            //no se puede sacar un libro
+                //redirigimos a modificar.php
+                header("Location: modificar.php?error=noHayExistencias&id=".$id);
+                die();
+            }
+
+        } else {//la cantidad no cambia
+            echo "cambiado de algo a otro algo donde no cambia el numero de libros";
+        }
+
+    }
+
 ?>

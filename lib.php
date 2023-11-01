@@ -40,6 +40,9 @@
         return $prestamos;
     }
 
+    /**
+     * busca los prestamos de un tipo concreto y los devuelve
+     */
     function searchPrestamos($tipo , $busqueda) {
         //crear conexion
         $con = establecerConexion();
@@ -110,9 +113,9 @@
         //crear la consulta
         $consulta = $con->prepare("SELECT prestamos.id, libros.isbn, usuarios.dni, prestamos.fechaInicio, prestamos.fechaFin, prestamos.estado
         FROM biblioteca.prestamos
-        inner join usuarios
+        right join usuarios
         on usuarios.id = prestamos.usuarioID
-        inner join libros
+        right join libros
         on libros.id = prestamos.libroId
         WHERE prestamos.id = ?; ");
 
@@ -127,5 +130,54 @@
 
         return $prestamo;
 
+    }
+
+    /**
+     * Busca un libro y lo devuelve
+     */
+    function buscarLibro($isbn) {
+        //establecer conexion
+        $con = establecerConexion();
+
+        //crear la consulta 
+        $consulta = $con->prepare("SELECT * FROM libros WHERE isbn = ? limit 1;");
+
+        $consulta->bindParam(1,$isbn);
+
+        $consulta -> setFetchMode(PDO::FETCH_ASSOC);
+        $consulta ->execute();
+
+        $libro = $consulta->fetch();
+
+        $con = null;
+
+        return $libro;
+
+    }
+
+    /**
+     * busca y devuelve un usuario con el mismo dni
+     */
+    function buscarUsuario($dni) {
+        //establecer conexion
+        $con = establecerConexion();
+
+        //crear la consulta 
+        $consulta = $con->prepare("SELECT * 
+        from usuarios
+        where dni = ?
+        limit 1;");
+
+        $consulta->bindParam(1,$dni);
+
+        $consulta -> setFetchMode(PDO::FETCH_ASSOC);
+        $consulta ->execute();
+
+        $usuario = $consulta->fetch();
+
+        $con = null;
+
+        return $usuario;
+        
     }
 ?>
