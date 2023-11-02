@@ -180,4 +180,65 @@
         return $usuario;
         
     }
+
+    /**
+     * modifica la cantidad de unideades de un libro
+     */
+    function modificarCantidadLibro($id,$cantidad) {
+        //establecer conexion
+        $con = establecerConexion();
+
+        $consulta= $con->prepare("UPDATE libros SET numeroEjemplares = ? WHERE id = ?");
+
+        $consulta->bindParam(1,$cantidad);
+        $consulta->bindParam(2,$id);
+
+        $consulta->execute();
+
+        $con = null;
+
+    }
+
+    function modificarPrestamo($id,$libroId,$usuarioId,$fechaInicio,$fechaFin,$estado) {
+        //establecer conexion
+        $con = establecerConexion();
+
+        $consulta = $con->prepare("UPDATE prestamos SET libroId = ?, usuarioID = ?, fechaInicio = ?, fechaFin = ? , estado = ? WHERE id = ?");
+        $consulta->bindParam(1,$libroId);
+        $consulta->bindParam(2,$usuarioId);
+        $consulta->bindParam(3,$fechaInicio);
+        $consulta->bindParam(4,$fechaFin);
+        $consulta->bindParam(5,$estado);
+        $consulta->bindParam(6,$id);
+
+        $consulta->execute();
+
+        $con = null;
+    }
+
+    function addPrestamo($libroId,$usuarioId,$fechaInicio,$fechaFin) {
+        //establecer conexion
+        $con = establecerConexion();
+
+        try {
+
+            $con->beginTransaction();
+
+            $consulta = $con->prepare("INSERT INTO prestamos (libroId,usuarioID,fechaInicio,fechaFin,estado) VALUES (?,?,?,?,'activo')");
+            $consulta->bindParam(1,$libroId);
+            $consulta->bindParam(2,$usuarioId);
+            $consulta->bindParam(3,$fechaInicio);
+            $consulta->bindParam(4,$fechaFin);
+
+            $consulta->execute();
+
+            $con->commit();
+
+
+        } catch (Exception $e) {
+            $con->rollBack();
+        }
+
+        $con = null;
+    }
 ?>

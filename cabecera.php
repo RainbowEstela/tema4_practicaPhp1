@@ -135,11 +135,40 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        
+
+
+
+      <form action="controlador.php" id="addForm" method="POST">
+        <h1 class="h3 mb-3 fw-normal">Datos del Prestamo</h1>
+        <div class="col-5">
+            <label for="isbn" class="form-label">ISBN</label>
+            <input type="text" class="form-control" id="isbn" name="isbn" placeholder="000000000-0" required>
+        </div>
+        <div class="col-5">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="text" class="form-control" id="dni" name="dni" placeholder="0000-0000" required>
+        </div>
+        <div class="col-5">
+            <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+        </div>
+        <div class="col-5">
+            <label for="fechaFin" class="form-label">Fecha Fin</label>
+            <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
+        </div>
+  </form>
+
+
+
+
+
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button class="btn btn-primary" type="submit" form="addForm" name="addPrestamo">Añadir</button>
       </div>
     </div>
   </div>
