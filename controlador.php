@@ -200,7 +200,7 @@
         //MODIFICAR PRESTAMO
         modificarPrestamo($id,$libro["id"],$usuario["id"],$fechaIni,$fechaFin,$estado);
 
-        header("Location: modificar.php?exito=true&id=".$id);
+        header("Location: index.php");
         die();
 
             
